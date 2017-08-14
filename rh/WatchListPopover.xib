@@ -27,7 +27,7 @@
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="LeB-Bs-a7S">
                             <rect key="frame" x="0.0" y="380" width="266" height="25"/>
                             <subviews>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeb-Ze-9ys">
+                                <button toolTip="Quit rh" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeb-Ze-9ys">
                                     <rect key="frame" x="226" y="3" width="30" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Power" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="f62-Z0-Gy3">
@@ -38,7 +38,7 @@
                                         <action selector="terminateApp:" target="-1" id="6Nz-fu-spn"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uym-7V-1C1">
+                                <button toolTip="Preferences" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uym-7V-1C1">
                                     <rect key="frame" x="193" y="2" width="30" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Settings" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="UqK-dn-AZ7">
@@ -49,7 +49,7 @@
                                         <action selector="showPreferences:" target="-2" id="Vmg-cy-nfZ"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kl8-4E-t5A">
+                                <button toolTip="Refresh" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kl8-4E-t5A">
                                     <rect key="frame" x="162" y="3" width="30" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Refresh" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="Ag8-fv-PLX">
@@ -60,7 +60,7 @@
                                         <action selector="refresh:" target="-2" id="3Ug-hm-Fve"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a3E-yJ-h21">
+                                <button toolTip="Log out" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a3E-yJ-h21">
                                     <rect key="frame" x="3" y="3" width="30" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Logout" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="xtj-Vr-Rlj">
@@ -71,7 +71,7 @@
                                         <action selector="logoutAction:" target="-2" id="shE-KC-s3v"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YdI-YP-LUH">
+                                <button toolTip="Share rh" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YdI-YP-LUH">
                                     <rect key="frame" x="135" y="3" width="30" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="Djj-UZ-omS">
