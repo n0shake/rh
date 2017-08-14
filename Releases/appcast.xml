@@ -1,0 +1,16 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+<channel>
+<title>rh Changelog</title>
+<link>https://github.com/abhishekbanthia/rh/blob/master/Releases/rh_latest.zip</link>
+<description>Most recent changes</description>
+<language>en</language>
+<item>
+<title>Version 0.0.1</title>
+<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+<sparkle:releaseNotesLink>https://s3.amazonaws.com/itsycal/changelog.html</sparkle:releaseNotesLink>
+<pubDate>Fri Aug 14 14:59:58 GMT 2017 +0000</pubDate>
+<enclosure url="https://github.com/abhishekbanthia/rh/blob/master/Releases/rh_latest.zip" sparkle:version="0.0.1" length="1023128" type="application/octet-stream"/>
+</item>
+</channel>
+</rss>
