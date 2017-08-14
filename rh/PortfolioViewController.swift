@@ -102,6 +102,7 @@ class PortfolioViewController: NSViewController {
     }
     
     @IBAction func showPreferences(_ sender: Any) {
+        closePopover()
         let preferencesWindow = PreferencesWindowController.sharedWindow
         preferencesWindow.showWindow(self)
         preferencesWindow.window?.orderFront(self)
@@ -117,10 +118,14 @@ class PortfolioViewController: NSViewController {
     }
     
     @IBAction func shareAction(_ sender: NSButton) {
-        
         let shareText = "Put Robinhood in your menubar. Download at https://github.com/abhishekbanthia/rh/tree/master/Releases/rh.app.zip"
         let servicePicker = NSSharingServicePicker(items: [shareText])
         servicePicker.show(relativeTo: sender.bounds, of: sender, preferredEdge: .minX)
+    }
+        
+    func closePopover() {
+        let delegate = NSApplication.shared().delegate as! AppDelegate
+        delegate.toggle()
     }
     
 }

@@ -59,11 +59,18 @@ class StatusPopoverController: NSObject {
             self.addChildViewControllersToPopover()
         }
         
-        if (popover.isShown) {
-            popover.performClose(nil)
+        if (close()) {
             return
         }
         self.showPopover(statusItemButton)
+    }
+    
+    func close() -> Bool {
+        if (popover.isShown) {
+            popover.performClose(nil)
+            return true
+        }
+        return false
     }
     
     func showPopover(_ statusItemButton: NSStatusBarButton) {
