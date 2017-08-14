@@ -27,12 +27,13 @@
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HSu-HG-d87">
                         <rect key="frame" x="24" y="306" width="40" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="overlaps" alignment="left" state="on" inset="2" id="XXA-Bo-F3v">
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="overlaps" alignment="left" inset="2" id="XXA-Bo-F3v">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" size="13" name="Avenir-Book"/>
                         </buttonCell>
                         <connections>
                             <action selector="startAtLogin:" target="-2" id="loJ-Bw-PF6"/>
+                            <binding destination="xb5-8V-IyX" name="value" keyPath="values.startAtLogin" id="jH7-XX-cRJ"/>
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N8j-yV-ZbK">
@@ -101,5 +102,6 @@
             <point key="canvasLocation" x="113" y="229.5"/>
         </window>
         <customObject id="8pu-02-o67" customClass="SUUpdater"/>
+        <userDefaultsController representsSharedInstance="YES" id="xb5-8V-IyX"/>
     </objects>
 </document>

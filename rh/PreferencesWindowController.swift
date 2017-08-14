@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ServiceManagement
 
 class PreferencesWindowController: NSWindowController {
     
@@ -60,7 +61,10 @@ class PreferencesWindowController: NSWindowController {
         
     }
     
-    @IBAction func startAtLogin(_ sender: Any) {
+    @IBAction func startAtLogin(_ sender: NSButton) {
+        if !SMLoginItemSetEnabled("com.abhishek.rhHelper" as CFString, Bool(sender.state as NSNumber)) {
+            print("Unable to set login item")
+        }
     }
     
     @IBAction func showPortfolioAmountInMenubar(_ sender: Any) {
