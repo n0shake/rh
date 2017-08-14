@@ -76,8 +76,8 @@ class MenubarController: NSObject {
             let results = data["results"].array
             let portfolio = results?[0]
             var number = portfolio?["equity"].string
-            if let extended = portfolio?["extended_hours_equity"]{
-                number = extended.string
+            if let extended = portfolio?["extended_hours_equity"].string{
+                number = extended
             }
             
             let previousClose = Float((portfolio?["equity_previous_close"].string)!)
