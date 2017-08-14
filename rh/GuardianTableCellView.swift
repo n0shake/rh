@@ -11,7 +11,12 @@ import Cocoa
 class GuardianTableCellView: NSTableCellView {
     
     @IBOutlet weak var stockSymbol: NSTextField!
-    @IBOutlet weak var tickerPrice: NSButton!
+    @IBOutlet weak var tickerPrice: NSButton! {
+        didSet {
+            self.tickerPrice.isBordered = false
+            self.tickerPrice.wantsLayer = true
+        }
+    }
     var quoteURL : String?
     var instrumentURL : String?
 
@@ -27,10 +32,13 @@ class GuardianTableCellView: NSTableCellView {
                     return
                 }
                 
-                if let tickerPrice = responseJSON?["last_trade_price"].string {
+                if let tickerPrice = responseJSON?["last_trade_price"].string, let previousClose = responseJSON?["previous_close"].string {
                     DispatchQueue.main.async {
                         let floatingPrice = Float(tickerPrice)
+                        let previousClose = Float(previousClose)
                         self.tickerPrice.title = String(format: "$%0.2f", floatingPrice!)
+                        self.tickerPrice.layer?.backgroundColor = (floatingPrice! - previousClose!) > 0 ? NSColor(red: 37.0/255.0, green: 199.0/255.0, blue: 135.0/255.0, alpha: 1.0).cgColor : NSColor(red: 229.0/255.0, green: 58.0/255.0, blue: 37.0/255.0, alpha: 1.0).cgColor
+                        self.tickerPrice.setTextColor(color: NSColor.white)
                     }
                 }
             }

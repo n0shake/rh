@@ -63,7 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func toggle() {
-        menubarController.popoverController.close()
+        _ = menubarController.popoverController.close()
     }
     
     func logout() {
