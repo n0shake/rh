@@ -16,7 +16,7 @@ class BackgroundLessScroller: NSScroller {
     }
     
     override class func scrollerWidth(for controlSize: NSControlSize, scrollerStyle: NSScrollerStyle) -> CGFloat {
-        return 8
+        return 5
     }
     
     
