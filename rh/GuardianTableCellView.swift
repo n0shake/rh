@@ -11,7 +11,7 @@ import Cocoa
 class GuardianTableCellView: NSTableCellView {
     
     @IBOutlet weak var stockSymbol: NSTextField!
-    @IBOutlet weak var tickerPrice: NSButton! {
+    @IBOutlet weak var tickerPrice: RHButton! {
         didSet {
             self.tickerPrice.isBordered = false
             self.tickerPrice.wantsLayer = true
@@ -36,13 +36,16 @@ class GuardianTableCellView: NSTableCellView {
                     DispatchQueue.main.async {
                         let floatingPrice = Float(tickerPrice)
                         let previousClose = Float(previousClose)
+                        let difference = floatingPrice! - previousClose!
                         self.tickerPrice.title = String(format: "$%0.2f", floatingPrice!)
-                        self.tickerPrice.layer?.backgroundColor = (floatingPrice! - previousClose!) > 0 ? NSColor(red: 37.0/255.0, green: 199.0/255.0, blue: 135.0/255.0, alpha: 1.0).cgColor : NSColor(red: 229.0/255.0, green: 58.0/255.0, blue: 37.0/255.0, alpha: 1.0).cgColor
+                        self.tickerPrice.alternateTitle = difference > 0 ? "+" + String(format: "%0.2f%%", (difference/previousClose!) * 100) : "-" + String(format: "%0.2f%%", (difference/previousClose!) * 100)
+                        self.tickerPrice.layer?.backgroundColor = (difference) > 0 ? NSColor(red: 37.0/255.0, green: 199.0/255.0, blue: 135.0/255.0, alpha: 1.0).cgColor : NSColor(red: 229.0/255.0, green: 58.0/255.0, blue: 37.0/255.0, alpha: 1.0).cgColor
                         self.tickerPrice.setTextColor(color: NSColor.white)
+                       
                     }
                 }
             }
 
     }
-
+    
 }
