@@ -23,7 +23,15 @@ private enum PortfolioKeys : String {
 
 class PortfolioViewController: NSViewController {
     
-    var operationQueue = OperationQueue()
+    @IBOutlet weak var loadingLabel: NSTextField!
+    @IBOutlet weak var loadingView: NSView! {
+        didSet {
+            self.loadingView.wantsLayer = true
+            self.loadingView.layer?.backgroundColor = NSColor.white.cgColor
+            self.loadingView.isHidden = true
+        }
+    }
+
     static var portfolioCounter = 0
     
     @IBOutlet weak var shareApp: NSButton! {
@@ -66,8 +74,20 @@ class PortfolioViewController: NSViewController {
     
     fileprivate func fetchSecuritiesOwned() {
         
+        if NetworkAssistant.isConnected() == false {
+            DispatchQueue.main.async {
+               self.loadingView.isHidden = false
+               self.loadingLabel.stringValue = "You appear to be offline."
+                return
+            }
+        }
+        
         APIManager.shared.getRequest(Endpoints.SecuritiesURL.url) { (responseJSON, error) in
             
+            DispatchQueue.main.async {
+                self.perform(#selector(self.hideLoadingView), with: nil, afterDelay: 5)
+            }
+    
             guard let data = responseJSON, error == nil else {
                 // check for fundamental networking error
                 print(error?.localizedDescription ?? PortfolioKeys.ErrorDefault.rawValue)
@@ -84,6 +104,11 @@ class PortfolioViewController: NSViewController {
             }
 
         }
+    }
+    
+    @objc private func hideLoadingView() {
+        self.loadingLabel.stringValue = ""
+        self.loadingView.isHidden = true
     }
     
     func getInstrument(withURL: String?) {
@@ -110,6 +135,12 @@ class PortfolioViewController: NSViewController {
     }
     
     @IBAction func refresh(_ sender: Any) {
+        self.securitiesOwned = [SecurityOwned]()
+        self.portfolios = [Security]()
+        self.loadingView.isHidden = false
+        self.loadingLabel.stringValue = "Refreshing..."
+        self.fetchSecuritiesOwned()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "MenubarTitleNeedsUpdate"), object: nil)
     }
    
     @IBAction func logoutAction(_ sender: Any) {
@@ -193,13 +224,17 @@ extension PortfolioViewController : NSTableViewDataSource, NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool {
         
+        if row == 0 || row >= self.securitiesOwned.count + 1{
+            return false
+        }
+        
         var destinationRow = row
         
         if destinationRow == 0 {
             return false
         }
         
-        if destinationRow == self.securitiesOwned.count+1 {
+        if destinationRow >= self.securitiesOwned.count+1 {
             destinationRow = destinationRow - 1
         }
         
@@ -218,6 +253,10 @@ extension PortfolioViewController : NSTableViewDataSource, NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation {
         return .move
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        
     }
     
 }
