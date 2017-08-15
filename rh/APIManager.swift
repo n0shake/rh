@@ -37,15 +37,32 @@ class APIManager: NSObject {
         return Singleton.instance
     }
     
-    func authenticate(username: String, password:String, completion : @escaping (_ response : String?, _ error : Error?) -> Void) {
+    func authenticate(username: String, password:String, MFA : String?, completion : @escaping (_ response : String?, _ error : Error?) -> Void) {
     
-        let parameters = String(format: "username=%@&password=%@", username, password)
+        var parameters : String?
+        
+        if let mfa_code = MFA {
+            parameters = String(format: "username=%@&password=%@&mfa_code=%@", username, password, mfa_code)
+        } else {
+            parameters = String(format: "username=%@&password=%@", username, password)
+        }
+    
         var request = URLRequest(url: URL(string:Endpoints.TokenURL.url)!)
         request.httpMethod = "POST"
-        request.httpBody = parameters.data(using: .utf8)
+        request.httpBody = parameters!.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            
             guard let data = data, error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            let json = JSON(data: data)
+            
+            if let _ = json["mfa_required"].bool, let mfa_type = json["mfa_type"].string{
+                let userInfoDictionary : [String:Any] = [NSLocalizedDescriptionKey : "2FA required by type \(mfa_type)"]
+                let error = NSError(domain:"2FA on.", code:100, userInfo:userInfoDictionary)
                 completion(nil, error)
                 return
             }
@@ -54,7 +71,7 @@ class APIManager: NSObject {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
                 let response = responseString!
-                let userInfoDictionary : [String:Any] = response.contains("Unable to log in with provided credentials") ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : "API Error \(httpStatus.statusCode)"]
+                let userInfoDictionary : [String:Any] = response.contains("Unable to log in with provided credentials") ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : response]
                 let error = NSError(domain:"Unsuccessful API request", code:httpStatus.statusCode, userInfo:userInfoDictionary)
                 completion(nil, error)
                 return
@@ -88,7 +105,7 @@ class APIManager: NSObject {
             }
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                let userInfoDictionary : [String:Any] = httpStatus.statusCode == 401 ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : "API Error \(httpStatus.statusCode)"]
+                let userInfoDictionary : [String:Any] = httpStatus.statusCode == 401 ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : JSON(data).string ?? "API Error"]
                 let error = NSError(domain:"Unsuccessful API request", code:httpStatus.statusCode, userInfo:userInfoDictionary)
                 completionHandler(nil, error)
                 return
@@ -120,7 +137,7 @@ class APIManager: NSObject {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
                 let response = responseString!
-                let userInfoDictionary : [String:Any] = response.contains("Unable to log in with provided credentials") ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : "API Error \(httpStatus.statusCode)"]
+                let userInfoDictionary : [String:Any] = response.contains("Unable to log in with provided credentials") ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : response]
                 let error = NSError(domain:"Unsuccessful API request", code:httpStatus.statusCode, userInfo:userInfoDictionary)
                 completionHandler(nil, error)
                 return
