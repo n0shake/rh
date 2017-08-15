@@ -7,11 +7,12 @@
 //
 
 import Cocoa
-import Locksmith
 
 class Authenticator: NSObject {
     
     public var authenticationToken : String?
+    public var requiresMFA : Bool = false
+    public var mfaType : String?
     
     static var shared: Authenticator {
         struct Singleton {
@@ -20,10 +21,15 @@ class Authenticator: NSObject {
         return Singleton.instance
     }
     
-    public func initialize(email: String, password: String, completion :@escaping (_ success : Bool, _ error : Error?) -> Void) {
-        login(email: email, password: password) { (success, error) in
+    override init() {
+        super.init()
+        self.setTokenForSessionIfPresent()
+    }
+    
+    public func initialize(email: String, password: String, MFA : String?, completion :@escaping (_ success : Bool, _ error : Error?) -> Void) {
+        login(email: email, password: password, MFA: MFA) { (success, error) in
             if success == true {
-                self.saveCredentialsToKeychain(username: email, password: password)
+                self.saveTokenToDefaults(token: self.authenticationToken!)
                 completion(true, nil)
             }else {
                 completion(false, error)
@@ -31,10 +37,9 @@ class Authenticator: NSObject {
         }
     }
     
-    private func login(email: String, password: String, completion :@escaping (_ success : Bool, _ error : Error?) -> Void) {
-        
-        APIManager.shared.authenticate(username: email, password: password) { (response, error) in
-            
+    private func login(email: String, password: String, MFA : String?, completion :@escaping (_ success : Bool, _ error : Error?) -> Void) {
+    
+        APIManager.shared.authenticate(username: email, password: password, MFA: MFA) { (response, error) in
             if error == nil, response != nil, let tokenString = response {
                 let start = tokenString.index(tokenString.startIndex, offsetBy: 10)
                 let end = tokenString.index(tokenString.endIndex, offsetBy: -2)
@@ -43,56 +48,34 @@ class Authenticator: NSObject {
                 completion(true, nil)
             }
             else {
+                print("Error in login \(error!)")
                 self.authenticationToken = nil
                 completion(false, error)
             }
         }
 
     }
-    
-    public func tryAuthentication(completion :@escaping (_ success : Bool) -> Void) {
-        print("Trying to log in silently.")
-        let cachedCredentials = Locksmith.loadDataForUserAccount(userAccount: "UserCredentials")
-        guard let credentials = cachedCredentials else {
-            completion(false)
-            return
-        }
-        let username = Array(credentials.keys)[0]
-        let password = credentials[username] as! String
-        login(email: username, password: password) { (success, error) in
-            completion(true)
-            if success == false {
-                print("Error encountered while trying silent authentication")
-            } else {
-                print("Able to login in silently with token : \(self.authenticationToken!)")
-            }
-        }
-    }
-    
 }
 
 extension Authenticator {
 
-    fileprivate func saveCredentialsToKeychain(username: String, password: String) {
-        print("Saving credentials to the Keychain.")
-        let cachedCredentials = Locksmith.loadDataForUserAccount(userAccount: "UserCredentials")
+    fileprivate func saveTokenToDefaults(token : String) {
+        let cachedCredentials = UserDefaults.standard.string(forKey: "token")
         if cachedCredentials == nil {
-            do {
-                try Locksmith.saveData(data: [username: password], forUserAccount: "UserCredentials")
-            }
-            catch {
-                print("Unable to save items to the Keychain")
-            }
+           UserDefaults.standard.setValue(token, forKey: "token")
         }
     }
     
-    public func clearKeychainData() {
-        do {
-            try Locksmith.deleteDataForUserAccount(userAccount: "UserCredentials")
+    fileprivate func setTokenForSessionIfPresent() {
+        if let token = UserDefaults.standard.string(forKey: "token") {
+            self.authenticationToken = token
+        } else {
+            print("No token found")
         }
-        catch {
-            print("Locksmith is not able to delete them credentials")
-        }
+    }
+    
+    public func clearTokenData() {
+        UserDefaults.standard.set(nil, forKey: "token")
     }
 
     
