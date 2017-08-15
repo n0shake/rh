@@ -8,7 +8,7 @@
 <item>
 <title>Version 1.0</title>
 <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
-<sparkle:releaseNotesLink>https://github.com/abhishekbanthia/rh/blob/master/Releases/changelog.html</sparkle:releaseNotesLink>
+<sparkle:releaseNotesLink>https://raw.githubusercontent.com/abhishekbanthia/rh/master/Releases/changelog.html</sparkle:releaseNotesLink>
 <pubDate>Fri Aug 14 14:59:58 GMT 2017 +0000</pubDate>
 <enclosure url="https://github.com/abhishekbanthia/rh/blob/master/Releases/rh_latest.zip" sparkle:version="1.0" length="1023128" type="application/octet-stream"/>
 </item>
