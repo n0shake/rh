@@ -11,17 +11,52 @@ import Cocoa
 class MenubarController: NSObject {
     
     public var popoverController = StatusPopoverController()
+    private var portfolioTimer : Timer?
     
     override init() {
         super.init()
-        Authenticator.shared.tryAuthentication { (success) in
+        self.installMenubarPreferenceNotification()
+        if let token = Authenticator.shared.authenticationToken {
+            print(token)
             DispatchQueue.main.async {
                 self.menubarItem.isEnabled = true
-                if success {
-                    self.menubarTitleNeedsUpdate()
-                }
+                self.menubarTitleNeedsUpdate()
             }
         }
+        else {
+            DispatchQueue.main.async {
+            self.menubarItem.isEnabled = true
+            self.menubarItem.title = "rh" }
+        }
+    }
+    
+    private func installMenubarPreferenceNotification() {
+        NotificationCenter.default.addObserver(self,
+                                        selector:#selector(self.sanitizeMenubar),
+                                               name: NSNotification.Name(rawValue: "MenubarPreferenceChangedNotification"),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector:#selector(self.menubarTitleNeedsUpdate),
+                                               name: NSNotification.Name(rawValue: "MenubarTitleNeedsUpdate"),
+                                               object: nil)
+    }
+    
+    @objc private func sanitizeMenubar() {
+        
+        let shouldShowPortfolio = UserDefaults.standard.bool(forKey: "showPortfolioInMenubar")
+        if shouldShowPortfolio {
+            self.menubarTitleNeedsUpdate()
+        } else {
+            if let timer = self.portfolioTimer {
+                timer.invalidate()
+                self.portfolioTimer = nil
+            }
+            self.menubarItem.title = "rh"
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     lazy var menubarItem: NSStatusItem = {
@@ -35,16 +70,18 @@ class MenubarController: NSObject {
         return statusItem
     }()
     
-    @objc fileprivate func statusItemAction(_ sender: NSStatusBarButton) {
+    @objc fileprivate func statusItemAction(_ sender: NSButton) {
         popoverController.showPopoverFromStatusItemButton(sender)
     }
     
     public func logout() {
-        self.popoverController.logout()
-        menubarItem.title = "rh"
+        DispatchQueue.main.async {
+            self.popoverController.logout()
+            self.menubarItem.title = "rh"
+        }
     }
     
-    private func menubarTitleNeedsUpdate() {
+    @objc private func menubarTitleNeedsUpdate() {
         
         DispatchQueue.main.async {
             self.menubarItem.title = "Stand by..."
@@ -52,15 +89,24 @@ class MenubarController: NSObject {
         }
         
         OperationQueueManager.shared.queue.addOperation {
-            let menubarTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { (timer) in
+            self.portfolioTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { (timer) in
                 self.fetchPortfolioValue()
             })
-            RunLoop.current.add(menubarTimer, forMode: .defaultRunLoopMode)
+            RunLoop.current.add(self.portfolioTimer!, forMode: .defaultRunLoopMode)
             RunLoop.current.run()
         }
     }
     
     private func fetchPortfolioValue() {
+        
+        if NetworkAssistant.isConnected() == false {
+            OperationQueue.main.addOperation {
+                self.menubarItem.isEnabled = true
+                self.menubarItem.title = "No Internet"
+            }
+            self.portfolioTimer?.invalidate()
+            return
+        }
         
         APIManager.shared.getRequest(Endpoints.PortfolioURL.url) { (responseJSON, error) in
             
@@ -96,5 +142,6 @@ class MenubarController: NSObject {
         }
     }
 
+    
 
 }
