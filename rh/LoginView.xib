@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G24b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12121"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="LoginViewController" customModule="rh" customModuleProvider="target">
             <connections>
+                <outlet property="codeEntryField" destination="W2X-dv-1GK" id="dLg-WS-JqW"/>
                 <outlet property="emailField" destination="x7s-fb-Xfj" id="4r2-ot-0sa"/>
                 <outlet property="errorLabel" destination="O5x-5b-EXx" id="KO5-xb-bRB"/>
                 <outlet property="loginButton" destination="Pa1-QW-hjY" id="bOu-dl-Sax"/>
+                <outlet property="mfaStackView" destination="DYT-0Y-hmL" id="qGR-dH-WY2"/>
                 <outlet property="passwordField" destination="Got-M9-InJ" id="Au1-fz-VQW"/>
                 <outlet property="progressIndicator" destination="6dM-LA-YU5" id="wuK-eP-F6a"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
@@ -19,13 +22,14 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView wantsLayer="YES" id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="266" height="433"/>
+            <rect key="frame" x="0.0" y="0.0" width="267" height="433"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x7s-fb-Xfj">
-                    <rect key="frame" x="21" y="228" width="225" height="24"/>
+                    <rect key="frame" x="21" y="228" width="226" height="24"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="KtP-Ye-DkF"/>
+                        <constraint firstAttribute="width" constant="226" id="ccD-1G-Anb"/>
                     </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" focusRingType="none" placeholderString="Email" drawsBackground="YES" id="V83-uW-NRR">
                         <font key="font" size="15" name="Avenir-Book"/>
@@ -37,9 +41,49 @@
                         <outlet property="nextKeyView" destination="Got-M9-InJ" id="qBq-iI-8EG"/>
                     </connections>
                 </textField>
+                <stackView identifier="MFA View" hidden="YES" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DYT-0Y-hmL">
+                    <rect key="frame" x="21" y="77" width="226" height="24"/>
+                    <subviews>
+                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W2X-dv-1GK">
+                            <rect key="frame" x="0.0" y="0.0" width="172" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="24" id="uJ7-xe-4eG"/>
+                                <constraint firstAttribute="width" constant="172" id="wjd-pJ-7Lv"/>
+                            </constraints>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" focusRingType="none" placeholderString="2FA Code" drawsBackground="YES" id="Uux-1k-QL2">
+                                <font key="font" size="15" name="Avenir-Book"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </textFieldCell>
+                        </textField>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xAJ-tg-D8H">
+                            <rect key="frame" x="174" y="-5.5" width="58" height="32"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="46" id="Qv2-Kl-IeJ"/>
+                                <constraint firstAttribute="height" constant="21" id="SL6-IJ-eJx"/>
+                            </constraints>
+                            <buttonCell key="cell" type="push" title="Go" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ab9-Qh-3xP">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="confirmMFA:" target="-2" id="y4e-dg-SIx"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
                 <secureTextField focusRingType="none" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Got-M9-InJ">
-                    <rect key="frame" x="21" y="192" width="225" height="25"/>
+                    <rect key="frame" x="21" y="192" width="226" height="25"/>
                     <constraints>
+                        <constraint firstAttribute="width" constant="226" id="fBj-A5-AEI"/>
                         <constraint firstAttribute="height" constant="25" id="juj-T6-Kd5"/>
                     </constraints>
                     <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" focusRingType="none" placeholderString="Password" drawsBackground="YES" usesSingleLineMode="YES" id="NxD-yK-FVV">
@@ -91,18 +135,6 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcn-pa-qc2">
-                    <rect key="frame" x="21" y="40" width="230" height="20"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="20" id="TQh-6c-NpT"/>
-                        <constraint firstAttribute="width" constant="230" id="toA-1A-WAF"/>
-                    </constraints>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Your credentials are stored securely in the" drawsBackground="YES" id="nYF-g4-ozy">
-                        <font key="font" size="12" name="Avenir-Book"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pa1-QW-hjY">
                     <rect key="frame" x="15" y="144" width="74" height="32"/>
                     <constraints>
@@ -121,29 +153,29 @@ DQ
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O5x-5b-EXx">
-                    <rect key="frame" x="21" y="111" width="225" height="24"/>
+                    <rect key="frame" x="21" y="111" width="226" height="24"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="NNS-4n-deV"/>
+                        <constraint firstAttribute="width" constant="226" id="kkg-2i-iBi"/>
                     </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" drawsBackground="YES" id="tpu-47-2hu">
-                        <font key="font" size="15" name="Avenir-Book"/>
+                        <font key="font" size="14" name="Avenir-Book"/>
                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <progressIndicator wantsLayer="YES" focusRingType="none" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="6dM-LA-YU5">
-                    <rect key="frame" x="91" y="150" width="155" height="20"/>
+                    <rect key="frame" x="91" y="150" width="156" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="18" id="Oea-O1-QtE"/>
                     </constraints>
                 </progressIndicator>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zay-Ky-wVd">
-                    <rect key="frame" x="21" y="20" width="94" height="20"/>
+                    <rect key="frame" x="21" y="20" width="226" height="20"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="94" id="YB0-Ca-xO6"/>
                         <constraint firstAttribute="height" constant="20" id="wYK-D5-nzL"/>
                     </constraints>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="macOS Keychain." drawsBackground="YES" id="TOP-mL-bFP">
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Your credentials are never stored/cached." drawsBackground="YES" id="TOP-mL-bFP">
                         <font key="font" size="12" name="Avenir-Book"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -153,28 +185,26 @@ DQ
             <constraints>
                 <constraint firstItem="x7s-fb-Xfj" firstAttribute="leading" secondItem="i5C-Yt-Fm7" secondAttribute="leading" id="2kI-dP-P3m"/>
                 <constraint firstItem="Got-M9-InJ" firstAttribute="top" secondItem="x7s-fb-Xfj" secondAttribute="bottom" constant="11" id="3zd-YL-Gig"/>
-                <constraint firstAttribute="trailing" secondItem="O5x-5b-EXx" secondAttribute="trailing" constant="20" id="5eM-me-gsj"/>
                 <constraint firstAttribute="trailing" secondItem="6dM-LA-YU5" secondAttribute="trailing" constant="20" id="6cs-Dn-cov"/>
                 <constraint firstAttribute="bottom" secondItem="Zay-Ky-wVd" secondAttribute="bottom" constant="20" id="ADN-jW-5VF"/>
                 <constraint firstItem="6dM-LA-YU5" firstAttribute="top" secondItem="Got-M9-InJ" secondAttribute="bottom" constant="23" id="COc-iS-824"/>
+                <constraint firstItem="DYT-0Y-hmL" firstAttribute="leading" secondItem="O5x-5b-EXx" secondAttribute="leading" id="EGt-QQ-2km"/>
                 <constraint firstItem="O5x-5b-EXx" firstAttribute="top" secondItem="Pa1-QW-hjY" secondAttribute="bottom" constant="16" id="HEs-zH-NAG"/>
                 <constraint firstItem="Zay-Ky-wVd" firstAttribute="leading" secondItem="Pa1-QW-hjY" secondAttribute="leading" id="IIh-l5-OUB"/>
                 <constraint firstItem="O5x-5b-EXx" firstAttribute="leading" secondItem="Pa1-QW-hjY" secondAttribute="leading" id="MOZ-52-NV3"/>
                 <constraint firstItem="i5C-Yt-Fm7" firstAttribute="leading" secondItem="o8J-XI-UNQ" secondAttribute="leading" id="Mv7-FK-l7X"/>
                 <constraint firstItem="vD5-r3-I4D" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="21" id="QWR-L9-whD"/>
                 <constraint firstItem="o8J-XI-UNQ" firstAttribute="leading" secondItem="vD5-r3-I4D" secondAttribute="leading" id="W7j-6f-uPt"/>
-                <constraint firstItem="vcn-pa-qc2" firstAttribute="leading" secondItem="Pa1-QW-hjY" secondAttribute="leading" id="WnZ-4n-Q8S"/>
                 <constraint firstItem="Pa1-QW-hjY" firstAttribute="top" secondItem="Got-M9-InJ" secondAttribute="bottom" constant="20" id="XQi-SS-sQe"/>
-                <constraint firstAttribute="trailing" secondItem="x7s-fb-Xfj" secondAttribute="trailing" constant="20" id="XQq-eW-jQC"/>
-                <constraint firstAttribute="trailing" secondItem="Got-M9-InJ" secondAttribute="trailing" constant="20" id="fL0-FY-DQM"/>
+                <constraint firstItem="DYT-0Y-hmL" firstAttribute="top" secondItem="O5x-5b-EXx" secondAttribute="bottom" constant="10" id="dSC-WC-rwE"/>
                 <constraint firstItem="Pa1-QW-hjY" firstAttribute="leading" secondItem="Got-M9-InJ" secondAttribute="leading" id="gb2-jw-ryH"/>
                 <constraint firstItem="Got-M9-InJ" firstAttribute="leading" secondItem="x7s-fb-Xfj" secondAttribute="leading" id="hVh-4r-ZLG"/>
-                <constraint firstItem="Zay-Ky-wVd" firstAttribute="top" secondItem="vcn-pa-qc2" secondAttribute="bottom" id="jxA-X0-vvd"/>
                 <constraint firstItem="x7s-fb-Xfj" firstAttribute="top" secondItem="i5C-Yt-Fm7" secondAttribute="bottom" constant="27" id="nIH-Bp-pTB"/>
                 <constraint firstItem="vD5-r3-I4D" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="32" id="pnP-Gk-nmV"/>
                 <constraint firstItem="6dM-LA-YU5" firstAttribute="leading" secondItem="Pa1-QW-hjY" secondAttribute="trailing" constant="8" id="rSk-P8-kj0"/>
                 <constraint firstItem="i5C-Yt-Fm7" firstAttribute="top" secondItem="o8J-XI-UNQ" secondAttribute="bottom" constant="-4" id="t2k-q8-bTE"/>
                 <constraint firstItem="o8J-XI-UNQ" firstAttribute="top" secondItem="vD5-r3-I4D" secondAttribute="bottom" constant="8" id="tYp-nE-eEx"/>
+                <constraint firstAttribute="trailing" secondItem="Zay-Ky-wVd" secondAttribute="trailing" constant="20" id="trc-BZ-jcJ"/>
             </constraints>
             <animations>
                 <caTransition key="subviews">
@@ -189,7 +219,7 @@ MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCJAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
 </mutableData>
                 </caTransition>
             </animations>
-            <point key="canvasLocation" x="139" y="167.5"/>
+            <point key="canvasLocation" x="138.5" y="167.5"/>
         </customView>
     </objects>
 </document>
