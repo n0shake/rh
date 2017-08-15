@@ -37,6 +37,11 @@ class Authenticator: NSObject {
         }
     }
     
+    public func logout() {
+        self.authenticationToken = nil
+        clearTokenData()
+    }
+    
     private func login(email: String, password: String, MFA : String?, completion :@escaping (_ success : Bool, _ error : Error?) -> Void) {
     
         APIManager.shared.authenticate(username: email, password: password, MFA: MFA) { (response, error) in
@@ -74,7 +79,7 @@ extension Authenticator {
         }
     }
     
-    public func clearTokenData() {
+    fileprivate func clearTokenData() {
         UserDefaults.standard.set(nil, forKey: "token")
     }
 

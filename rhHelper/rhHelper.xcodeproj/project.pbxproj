@@ -94,7 +94,7 @@
 					C282D16A1F41FC61007CD95F = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = AJS5SNW8EY;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -248,7 +248,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AJS5SNW8EY;
 				INFOPLIST_FILE = rhHelper/Info.plist;
@@ -265,7 +265,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AJS5SNW8EY;
 				INFOPLIST_FILE = rhHelper/Info.plist;
@@ -297,6 +297,7 @@
 				C282D17C1F41FC61007CD95F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

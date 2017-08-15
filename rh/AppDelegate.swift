@@ -16,6 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let menubarController = MenubarController()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        initializeDefaults()
         Fabric.with([Crashlytics.self])
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
         checkIfAnotherInstanceIsRunning()
@@ -72,6 +73,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func slideToPortfolio() {
          menubarController.popoverController.transitionToPortfolioViewController()
+    }
+    
+    func initializeDefaults() {
+        let showPorfolioInMenubar = UserDefaults.standard.integer(forKey: "ShowPorfolioInMenubar")
+        if showPorfolioInMenubar == nil {
+            UserDefaults.standard.setValue(1, forKey: "ShowPorfolioInMenubar")
+        }
     }
     
 }

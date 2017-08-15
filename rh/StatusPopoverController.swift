@@ -92,14 +92,13 @@ class StatusPopoverController: NSObject {
     }
     
     func logout() {
-        Authenticator.shared.clearTokenData()
+        Authenticator.shared.logout()
         DispatchQueue.main.async {
             let transition: NSViewControllerTransitionOptions = .slideRight
             self.popover.contentViewController?.transition(from: self.popoverController,
                                                             to: self.loginController,
                                                             options: transition,
                                                             completionHandler: { finished in
-                                                                Authenticator.shared.authenticationToken = nil
             })
         }
         
