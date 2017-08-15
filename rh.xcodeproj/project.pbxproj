@@ -17,6 +17,7 @@
 		9A3DA0A01F39608200500448 /* StockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3DA09F1F39608200500448 /* StockTableViewCell.swift */; };
 		9A3DA0A91F39698500500448 /* Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3DA0A81F39698500500448 /* Security.swift */; };
 		9A7832801F424C0600B0C5BF /* NSButton + TextColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A78327F1F424C0600B0C5BF /* NSButton + TextColor.swift */; };
+		9A7832831F425CAA00B0C5BF /* RHButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7832821F425CAA00B0C5BF /* RHButton.swift */; };
 		C2698DD81F3FC8E3006E95D4 /* MenubarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2698DD71F3FC8E3006E95D4 /* MenubarController.swift */; };
 		C2698DDF1F3FD7F8006E95D4 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2698DDD1F3FD7F8006E95D4 /* Crashlytics.framework */; };
 		C2698DE01F3FD7F8006E95D4 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2698DDE1F3FD7F8006E95D4 /* Fabric.framework */; };
@@ -83,6 +84,7 @@
 		9A3DA09F1F39608200500448 /* StockTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockTableViewCell.swift; sourceTree = "<group>"; };
 		9A3DA0A81F39698500500448 /* Security.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Security.swift; sourceTree = "<group>"; };
 		9A78327F1F424C0600B0C5BF /* NSButton + TextColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSButton + TextColor.swift"; sourceTree = "<group>"; };
+		9A7832821F425CAA00B0C5BF /* RHButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RHButton.swift; sourceTree = "<group>"; };
 		C2698DD71F3FC8E3006E95D4 /* MenubarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenubarController.swift; sourceTree = "<group>"; };
 		C2698DDD1F3FD7F8006E95D4 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Dependencies/Crashlytics.framework; sourceTree = "<group>"; };
 		C2698DDE1F3FD7F8006E95D4 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Dependencies/Fabric.framework; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				C2E9502D1F3E0CF6005A944F /* HyperlinkField.swift */,
 				C2E950331F3E1FAD005A944F /* Operations.swift */,
 				9A78327F1F424C0600B0C5BF /* NSButton + TextColor.swift */,
+				9A7832821F425CAA00B0C5BF /* RHButton.swift */,
 			);
 			name = Customizations;
 			sourceTree = "<group>";
@@ -410,6 +413,7 @@
 				C28508991F3CCF7100243D95 /* LoginViewController.swift in Sources */,
 				C2AB74A21F3D488700C8B1A1 /* WatchlistTableCellView.swift in Sources */,
 				9A7832801F424C0600B0C5BF /* NSButton + TextColor.swift in Sources */,
+				9A7832831F425CAA00B0C5BF /* RHButton.swift in Sources */,
 				C2E950341F3E1FAD005A944F /* Operations.swift in Sources */,
 				C2BD6BC81F3A0FAB00C9A7B7 /* APIManager.swift in Sources */,
 				C2E950371F3E5620005A944F /* GuardianTableCellView.swift in Sources */,

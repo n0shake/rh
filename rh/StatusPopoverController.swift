@@ -52,7 +52,7 @@ class StatusPopoverController: NSObject {
         popover.animates = true
     }
     
-    func showPopoverFromStatusItemButton(_ statusItemButton: NSStatusBarButton) {
+    func showPopoverFromStatusItemButton(_ statusItemButton: NSButton) {
         
         if popover.contentViewController == nil {
             self.setPopoverContentViewController()
@@ -73,7 +73,7 @@ class StatusPopoverController: NSObject {
         return false
     }
     
-    func showPopover(_ statusItemButton: NSStatusBarButton) {
+    func showPopover(_ statusItemButton: NSButton) {
         DispatchQueue.main.async {
             self.popover.show(relativeTo: NSZeroRect, of: statusItemButton, preferredEdge: .maxY)
             NSApp.activate(ignoringOtherApps: true)
@@ -92,7 +92,7 @@ class StatusPopoverController: NSObject {
     }
     
     func logout() {
-        Authenticator.shared.clearKeychainData()
+        Authenticator.shared.clearTokenData()
         DispatchQueue.main.async {
             let transition: NSViewControllerTransitionOptions = .slideRight
             self.popover.contentViewController?.transition(from: self.popoverController,

@@ -68,6 +68,7 @@ class PreferencesWindowController: NSWindowController {
     }
     
     @IBAction func showPortfolioAmountInMenubar(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "MenubarPreferenceChangedNotification"), object: nil)
     }
    
     
