@@ -39,17 +39,16 @@ class APIManager: NSObject {
     
     func authenticate(username: String, password:String, MFA : String?, completion : @escaping (_ response : String?, _ error : Error?) -> Void) {
     
-        var parameters : String?
+        var parameters = String(format: "username=%@&password=%@", username, password)
         
         if let mfa_code = MFA {
-            parameters = String(format: "username=%@&password=%@&mfa_code=%@", username, password, mfa_code)
-        } else {
-            parameters = String(format: "username=%@&password=%@", username, password)
+            let mfa = String(format: "&mfa_code=%@", mfa_code)
+            parameters.append(mfa)
         }
     
         var request = URLRequest(url: URL(string:Endpoints.TokenURL.url)!)
         request.httpMethod = "POST"
-        request.httpBody = parameters!.data(using: .utf8)
+        request.httpBody = parameters.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             

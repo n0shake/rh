@@ -84,7 +84,7 @@ class MenubarController: NSObject {
     @objc private func menubarTitleNeedsUpdate() {
         
         DispatchQueue.main.async {
-            self.menubarItem.title = "Stand by..."
+            self.menubarItem.title = "Stand by ..."
             self.menubarItem.isEnabled = false
         }
         

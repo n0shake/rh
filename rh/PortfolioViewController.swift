@@ -31,7 +31,6 @@ class PortfolioViewController: NSViewController {
             self.loadingView.isHidden = true
         }
     }
-
     static var portfolioCounter = 0
     
     @IBOutlet weak var shareApp: NSButton! {
@@ -39,8 +38,7 @@ class PortfolioViewController: NSViewController {
             self.shareApp.sendAction(on: .leftMouseDown)
         }
     }
-    
-    
+ 
     @IBOutlet weak var mainTableview: NSTableView! {
         didSet {
             self.mainTableview.register(forDraggedTypes: [PortfolioKeys.DragKey.rawValue])
@@ -102,7 +100,24 @@ class PortfolioViewController: NSViewController {
                 }
                 self.mainTableview.reloadData()
             }
-
+            self.fetchWatchlist()
+        }
+    }
+    
+    func fetchWatchlist() {
+        
+        OperationQueueManager.shared.queue.addOperation {
+            APIManager.shared.getRequest("https://api.robinhood.com/watchlists/Default/") { (responseJSON, error) in
+                guard error == nil else { return }
+                let result = responseJSON?["results"].array
+                if let watchlist = result {
+                    for instrument in watchlist {
+                        let instrumentDictionary = instrument.dictionary
+                        self.getInstrument(withURL: instrumentDictionary?["instrument"]?.string)
+                    }
+                }
+                
+            }
         }
     }
     
@@ -116,13 +131,15 @@ class PortfolioViewController: NSViewController {
         APIManager.shared.getInstrument(withURL: withURL!) { (json, error) in
             
             if error == nil {
-                let security = Security(json: (json?.dictionary)!)
-                self.portfolios.append(security)
+                DispatchQueue.main.async {
+                    let security = Security(json: (json?.dictionary)!)
+                    self.portfolios.append(security)
+                    self.mainTableview.reloadData()
+                }
             }
             else {
                 print(error?.localizedDescription ?? PortfolioKeys.ErrorDefault.rawValue)
             }
-            
         }
     }
     
