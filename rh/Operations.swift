@@ -539,6 +539,7 @@ public class OperationQueueManager {
     lazy var queue : OperationQueue = {
         let q = OperationQueue()
         q.name = "SharedQueue"
+        q.qualityOfService = .background
         return q
     }()
 

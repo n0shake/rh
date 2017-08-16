@@ -30,6 +30,13 @@ public enum Endpoints : String {
 
 class APIManager: NSObject {
     
+    private lazy var urlSession : URLSession = {
+        let session = URLSessionConfiguration.default
+        session.urlCache = nil
+        session.requestCachePolicy = .reloadIgnoringLocalCacheData
+        return URLSession(configuration: session)
+    }()
+    
     static var shared: APIManager {
         struct Singleton {
             static let instance = APIManager()
@@ -50,7 +57,7 @@ class APIManager: NSObject {
         request.httpMethod = "POST"
         request.httpBody = parameters.data(using: .utf8)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = self.urlSession.dataTask(with: request) { data, response, error in
             
             guard let data = data, error == nil else {
                 completion(nil, error)
@@ -95,8 +102,7 @@ class APIManager: NSObject {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = headers
         
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+        let dataTask = self.urlSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             
             guard let data = data, error == nil else {
                 completionHandler(nil, error)
@@ -104,7 +110,11 @@ class APIManager: NSObject {
             }
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                let userInfoDictionary : [String:Any] = httpStatus.statusCode == 401 ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : JSON(data).string ?? "API Error"]
+                var userInfoDictionary : [String:Any] = httpStatus.statusCode == 401 ? [NSLocalizedDescriptionKey : "Invalid Credentials"] : [NSLocalizedDescriptionKey : JSON(data).string ?? "API Error \(httpStatus.statusCode)"]
+                if httpStatus.statusCode == 500 {
+                    userInfoDictionary = [NSLocalizedDescriptionKey : "Server Error"]
+                }
+                
                 let error = NSError(domain:"Unsuccessful API request", code:httpStatus.statusCode, userInfo:userInfoDictionary)
                 completionHandler(nil, error)
                 return
@@ -125,8 +135,7 @@ class APIManager: NSObject {
                                  timeoutInterval: 10.0)
         request.httpMethod = "GET"
         
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+        let dataTask = self.urlSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             guard let data = data, error == nil else {
                 completionHandler(nil, error)
                 return
