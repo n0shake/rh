@@ -9,6 +9,14 @@
 import Cocoa
 
 class RHButton: NSButton {
+    
+    public enum ButtonTitleStyle {
+        case quotePrice
+        case totalPortfolioValue
+        case percentageChange
+    }
+    
+    public var selectedTitleStyle : ButtonTitleStyle = .quotePrice
 
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
@@ -20,6 +28,7 @@ class RHButton: NSButton {
         super.mouseUp(with: event)
     }
     
+
 
     
 }

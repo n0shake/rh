@@ -14,11 +14,10 @@ class WatchlistTableCellView: GuardianTableCellView {
         self.stockSymbol.stringValue = security.symbol!
         self.tickerPrice.title = "..."
         self.quoteURL = security.quoteURL!
-        Timer.scheduledTimer(timeInterval: 3,
-                             target: self,
-                             selector: #selector(self.fetchQuotes),
-                             userInfo: nil,
-                             repeats: true)
+        if let quote = security.quote {
+            self.tickerPrice.title = (quote.last_trade_price)!
+        }
     }
-
+    
+    
 }

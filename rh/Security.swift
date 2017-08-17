@@ -9,12 +9,13 @@
 import Cocoa
 import SwiftyJSON
 
-public struct SecurityOwned {
+public class SecurityOwned {
     
     var instrumentURL: String?
     var quantity: String?
     var averageBuyPrice: String?
     var symbol : String?
+    var quote : Quote?
     
     public init(security : [String:AnyObject]) {
         self.instrumentURL = security["instrument"]! as? String
@@ -29,14 +30,14 @@ public struct SecurityOwned {
     }
 }
 
-public struct Security {
+public class Security {
     
     var instrumentURL: String?
     var quantity: String?
     var averageBuyPrice: String?
     var symbol : String?
     var quoteURL : String?
-
+    var quote : Quote?
     
     public init(json : [String:JSON]) {
         self.instrumentURL = json["url"]?.string
@@ -44,5 +45,23 @@ public struct Security {
         self.quoteURL = json["quote"]?.string
     }
     
+}
+
+public struct Quote {
+    
+    var last_trade_price: String?
+    var symbol : String?
+    var instrumentURL : String?
+    var bidPrice : String?
+    var tradingHalted : Bool?
+    var previous_close_price : String?
+    
+    public init(json : JSON) {
+        self.instrumentURL = json["instrument"].string
+        self.symbol = json["symbol"].string
+        self.last_trade_price = json["last_trade_price"].string
+        self.previous_close_price = json["previous_close"].string
+    }
+
 }
 

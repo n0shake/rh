@@ -16,6 +16,7 @@ public enum Endpoints : String {
     case WatchListURL = "/watchlists/Default/"
     case PortfolioURL = "/portfolios/"
     case SecuritiesURL = "/positions/?nonzero=true"
+    case QuotesURL = "/quotes/?symbols="
     
     var url: String {
         switch self {
@@ -103,7 +104,6 @@ class APIManager: NSObject {
         request.allHTTPHeaderFields = headers
         
         let dataTask = self.urlSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
-            
             guard let data = data, error == nil else {
                 completionHandler(nil, error)
                 return
@@ -123,6 +123,35 @@ class APIManager: NSObject {
             let json = JSON(data: data)
             completionHandler(json, nil)
 
+        })
+        
+        dataTask.resume()
+    }
+    
+    func getQuotes(_ url: String, completionHandler : @escaping (_ response : Array<Quote>?, _ error : Error?) -> Void){
+
+        guard let token = Authenticator.shared.authenticationToken else {
+            return
+        }
+        
+        let headers = ["authorization": "Token \(token)"]
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = headers
+        
+        let dataTask = self.urlSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            if (error != nil) {
+                print(error ?? "Error")
+            } else {
+                let json = JSON(data: data!)
+                let quotes = json["results"].array
+                var modelArray = Array<Quote>()
+                for quote in quotes! {
+                    let quoteModel = Quote(json: quote)
+                    modelArray.append(quoteModel)
+                }
+                completionHandler(modelArray, nil)
+            }
         })
         
         dataTask.resume()

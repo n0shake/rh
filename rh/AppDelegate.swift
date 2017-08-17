@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func initializeDefaults() {
         let showPorfolioInMenubar = UserDefaults.standard.integer(forKey: "ShowPorfolioInMenubar")
-        if showPorfolioInMenubar == nil {
+        if showPorfolioInMenubar == 0 {
             UserDefaults.standard.setValue(1, forKey: "ShowPorfolioInMenubar")
         }
     }

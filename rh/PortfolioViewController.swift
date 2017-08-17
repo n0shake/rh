@@ -32,6 +32,9 @@ class PortfolioViewController: NSViewController {
         }
     }
     static var portfolioCounter = 0
+    static var stockListCounter = 0
+
+    var symbols = Set<String>()
     
     @IBOutlet weak var shareApp: NSButton! {
         didSet {
@@ -93,14 +96,46 @@ class PortfolioViewController: NSViewController {
             }
             
             let securities = data[PortfolioKeys.JsonResultsKey.rawValue].array
+            
             DispatchQueue.main.async {
                 for security in securities! {
                     let stock = SecurityOwned(json: security)
                     self.securitiesOwned.append(stock)
                 }
                 self.mainTableview.reloadData()
+                OperationQueueManager.shared.queue.addOperation {
+                    self.fetchInstrumentsForSecurityOwned()
+                    self.fetchWatchlist()
+                }
             }
-            self.fetchWatchlist()
+        }
+    }
+    
+    func fetchInstrumentsForSecurityOwned() {
+        
+        for (index,security) in self.securitiesOwned.enumerated() {
+            
+            self.getInstrument(withURL: security.instrumentURL, completion: { (securityModel, success) in
+                if success {
+                    
+                    guard let model = securityModel else {
+                        print("Security model is nil")
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        security.symbol = model.symbol
+                        self.symbols.insert(model.symbol!)
+                        if index == self.securitiesOwned.count {
+                            self.mainTableview.reloadData()
+                        }
+                    }
+                } else {
+                    Swift.print("Failure while fetching URL")
+                }
+
+            })
+            
         }
     }
     
@@ -113,7 +148,23 @@ class PortfolioViewController: NSViewController {
                 if let watchlist = result {
                     for instrument in watchlist {
                         let instrumentDictionary = instrument.dictionary
-                        self.getInstrument(withURL: instrumentDictionary?["instrument"]?.string)
+                        
+                        self.getInstrument(withURL: instrumentDictionary?["instrument"]?.string, completion: { (security, success) in
+                            if success {
+                                guard let model = security else {
+                                    print("Security model is nil")
+                                    return
+                                }
+                                self.portfolios.append(model)
+                                self.symbols.insert(model.symbol!)
+                                if watchlist.count == self.portfolios.count {
+                                    self.scheduleAutoupdatingQuoteFetcher()
+                                    DispatchQueue.main.async {
+                                       self.mainTableview.reloadData()
+                                    }
+                                }
+                            }
+                        })
                     }
                 }
                 
@@ -126,19 +177,83 @@ class PortfolioViewController: NSViewController {
         self.loadingView.isHidden = true
     }
     
-    func getInstrument(withURL: String?) {
+    func getInstrument(withURL: String?, completion handler: @escaping  (_ model : Security?, _ error : Bool) -> Void) {
         
         APIManager.shared.getInstrument(withURL: withURL!) { (json, error) in
             
             if error == nil {
                 DispatchQueue.main.async {
                     let security = Security(json: (json?.dictionary)!)
-                    self.portfolios.append(security)
-                    self.mainTableview.reloadData()
+                    handler(security, true)
                 }
             }
             else {
                 print(error?.localizedDescription ?? PortfolioKeys.ErrorDefault.rawValue)
+            }
+        }
+    }
+    
+    func scheduleAutoupdatingQuoteFetcher() {
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { (timer) in
+                self.getAllQuotesTogether()
+            }
+        }
+    }
+    
+    func getAllQuotesTogether() {
+        
+        let URL = self.symbols.joined(separator: ",")
+        let baseURL = Endpoints.QuotesURL.url + URL
+        PortfolioViewController.portfolioCounter = 0
+        PortfolioViewController.stockListCounter = 0
+        
+        APIManager.shared.getQuotes(baseURL) { (responseJSON, error) in
+            
+            guard error == nil || responseJSON != nil else{
+                print("Response JSON is nil or error is nil")
+                print(error?.localizedDescription ?? "Error encountered")
+                return
+            }
+            
+            if let response = responseJSON {
+                DispatchQueue.main.async {
+                    for i in 0..<self.portfolios.count {
+                        let current = self.portfolios[i]
+                        for quoteModel in response {
+                            if current.instrumentURL == quoteModel.instrumentURL {
+                                current.quote = quoteModel
+                                break
+                            }
+                        }
+                    }
+                    for i in 0..<self.securitiesOwned.count {
+                        let current = self.securitiesOwned[i]
+                        for quoteModel in response {
+                            if current.instrumentURL == quoteModel.instrumentURL {
+                                current.quote = quoteModel
+                                break
+                            }
+                        }
+                    }
+                    
+                    for i in 0..<self.mainTableview.numberOfRows {
+                        
+                        let currentrow = self.mainTableview.view(atColumn: 0, row: i, makeIfNecessary: false)
+                        print(PortfolioViewController.stockListCounter, self.securitiesOwned.count)
+                        
+                        if let row = currentrow as? WatchlistTableCellView, PortfolioViewController.portfolioCounter < self.portfolios.count, let quote = self.portfolios[PortfolioViewController.portfolioCounter].quote {
+                            row.updateTickerPrice(quote)
+                            PortfolioViewController.portfolioCounter += 1
+                        }
+                        if let stockCell = currentrow as? StockTableViewCell, PortfolioViewController.stockListCounter < self.securitiesOwned.count,
+                            let quote = self.securitiesOwned[PortfolioViewController.stockListCounter].quote  {
+                            stockCell.updateTickerPrice(quote)
+                            PortfolioViewController.stockListCounter += 1
+                            continue
+                        }
+                    }
+                }
             }
         }
     }

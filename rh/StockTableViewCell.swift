@@ -27,46 +27,13 @@ class StockTableViewCell: GuardianTableCellView {
             self.instrumentURL = instrument
         }
         
-        self.createOperations()
-    }
-    
-    public func createOperations() {
-        
-        let symbolNetworkOperation = BlockOperation {
-            if let instrument = self.instrumentURL {
-                self.fetchSymbol(instrument)
-            }
+        if let symbol = security.symbol {
+            self.stockSymbol.stringValue = symbol
         }
         
-        let quoteNetworkOperation = BlockOperation {
-            let quoteTimer = Timer(timeInterval: 3, target: self, selector: #selector(self.fetchQuotes), userInfo: nil, repeats: true)
-            RunLoop.main.add(quoteTimer, forMode: .commonModes)
-        }
-    
-        quoteNetworkOperation.addDependency(symbolNetworkOperation)
-        OperationQueueManager.shared.queue.addOperation(quoteNetworkOperation)
-        OperationQueueManager.shared.queue.addOperation(symbolNetworkOperation)
     }
     
-    public func fetchSymbol(_ url : String) {
-        
-        APIManager.shared.getInstrument(withURL: url) { (responseJSON, error) in
-            guard responseJSON != nil, error == nil else {
-                DispatchQueue.main.async {
-                    self.tickerPrice.title = "Error"
-                }
-                return
-            }
-            if let stockSymbol = responseJSON?["symbol"].string,
-                let quoteURL = responseJSON?["quote"].string  {
-                DispatchQueue.main.async {
-                    self.quoteURL = quoteURL
-                    self.stockSymbol.stringValue = stockSymbol
-
-                }
-            }
-        }
-    }
+    
     
 }
 
