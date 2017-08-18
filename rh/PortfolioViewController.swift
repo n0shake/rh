@@ -240,8 +240,7 @@ class PortfolioViewController: NSViewController {
                     for i in 0..<self.mainTableview.numberOfRows {
                         
                         let currentrow = self.mainTableview.view(atColumn: 0, row: i, makeIfNecessary: false)
-                        print(PortfolioViewController.stockListCounter, self.securitiesOwned.count)
-                        
+   
                         if let row = currentrow as? WatchlistTableCellView, PortfolioViewController.portfolioCounter < self.portfolios.count, let quote = self.portfolios[PortfolioViewController.portfolioCounter].quote {
                             row.updateTickerPrice(quote)
                             PortfolioViewController.portfolioCounter += 1

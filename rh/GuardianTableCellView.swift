@@ -22,7 +22,7 @@ class GuardianTableCellView: NSTableCellView {
     
     func updateTickerPrice(_ quote : Quote) {
         let floatingPrice = Float(quote.last_trade_price!)
-        let previousClose = Float(quote.last_trade_price!)
+        let previousClose = Float(quote.previous_close_price!)
         let difference = floatingPrice! - previousClose!
         self.tickerPrice.title = String(format: "$%0.2f", floatingPrice!)
         self.tickerPrice.alternateTitle = difference > 0 ? "+" + String(format: "%0.2f%%", (difference/previousClose!) * 100) : String(format: "%0.2f%%", (difference/previousClose!) * 100)

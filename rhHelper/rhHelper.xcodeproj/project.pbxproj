@@ -92,6 +92,7 @@
 					C282D16A1F41FC61007CD95F = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = AJS5SNW8EY;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -253,6 +254,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -270,6 +272,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

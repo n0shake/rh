@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import SwiftyJSON
+
 
 class LoginViewController: NSViewController {
     
