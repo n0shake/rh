@@ -1,3 +1,2 @@
-github "SwiftyJSON/SwiftyJSON" "3.1.4"
-github "matthewpalmer/Locksmith" "3.0.0"
-github "sparkle-project/Sparkle" "1.18.0"
+github "SwiftyJSON/SwiftyJSON" "4.0.0"
+github "sparkle-project/Sparkle" "1.18.1"

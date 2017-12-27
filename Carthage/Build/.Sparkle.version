@@ -2,7 +2,7 @@
   "iOS" : [
 
   ],
-  "commitish" : "1.18.0",
+  "commitish" : "1.18.1",
   "watchOS" : [
 
   ],
@@ -11,7 +11,7 @@
   ],
   "Mac" : [
     {
-      "hash" : "f20af89ba2871321a49eadd8925d9876d1eb984989b19a333680d79252d75762",
+      "hash" : "5c3bebc2aae3f31d5c1a14b0c4471fc8b1cff8d60185cba02d3417ce0c9fd113",
       "name" : "Sparkle"
     }
   ]
