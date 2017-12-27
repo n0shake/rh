@@ -65,9 +65,9 @@ class APIManager: NSObject {
                 return
             }
             
-            let json = JSON(data: data)
+            let json = try? JSON(data: data)
             
-            if let _ = json["mfa_required"].bool, let mfa_type = json["mfa_type"].string{
+            if let _ = json!["mfa_required"].bool, let mfa_type = json!["mfa_type"].string{
                 let userInfoDictionary : [String:Any] = [NSLocalizedDescriptionKey : "2FA required by type \(mfa_type)"]
                 let error = NSError(domain:"2FA on.", code:100, userInfo:userInfoDictionary)
                 completion(nil, error)
@@ -120,8 +120,8 @@ class APIManager: NSObject {
                 return
             }
 
-            let json = JSON(data: data)
-            completionHandler(json, nil)
+            let json = try? JSON(data: data)
+            completionHandler(json!, nil)
 
         })
         
@@ -143,8 +143,8 @@ class APIManager: NSObject {
             if (error != nil) {
                 print(error ?? "Error")
             } else {
-                let json = JSON(data: data!)
-                let quotes = json["results"].array
+                let json = try? JSON(data: data!)
+                let quotes = json!["results"].array
                 var modelArray = Array<Quote>()
                 for quote in quotes! {
                     let quoteModel = Quote(json: quote)
@@ -180,8 +180,8 @@ class APIManager: NSObject {
                 return
             }
             
-            let json = JSON(data: data)
-            completionHandler(json, nil)
+            let json = try? JSON(data: data)
+            completionHandler(json!, nil)
         })
         
         dataTask.resume()

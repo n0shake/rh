@@ -22,7 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         checkIfAnotherInstanceIsRunning()
         #if DEBUG
         #else
-            checkIfAppIsInApplicationFolder()
+   
         #endif
     }
     
@@ -36,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if bundlePath.hasPrefix(appDir) { return }
         }
         
-        NSApplication.shared().activate(ignoringOtherApps: true)
+        NSApplication.shared.activate(ignoringOtherApps: true)
         DispatchQueue.main.async {
             let wrongDirectoryAlert = NSAlert()
             wrongDirectoryAlert.messageText = "Move rh to the Applications folder"
@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let identifier = Bundle.main.bundleIdentifier else { return }
         let apps = NSRunningApplication.runningApplications(withBundleIdentifier: identifier)
         if apps.count > 1 {
-            let currentApplication = NSRunningApplication.current()
+            let currentApplication = NSRunningApplication.current
             for app in apps {
                 if app != currentApplication {
                     app.activate(options: [.activateAllWindows,.activateIgnoringOtherApps])

@@ -11,7 +11,7 @@ import ServiceManagement
 
 class PreferencesWindowController: NSWindowController {
     
-    static let sharedWindow = PreferencesWindowController(windowNibName: "PreferencesWindow")
+    static let sharedWindow = PreferencesWindowController(windowNibName: NSNib.Name(rawValue: "PreferencesWindow"))
     private var twitterURL = URL(string: "https://twitter.com/abgbm")
     private var sourceURL = URL(string: "https://github.com/abhishekbanthia/rh")
     
@@ -49,12 +49,12 @@ class PreferencesWindowController: NSWindowController {
     
     @IBAction func openMyTwitter(_ sender: Any) {
         guard let feedbackURL = twitterURL else { return }
-        NSWorkspace.shared().open(feedbackURL)
+        NSWorkspace.shared.open(feedbackURL)
     }
     
     @IBAction func opensSource(_ sender: Any) {
         guard let githubURL = sourceURL else { return }
-        NSWorkspace.shared().open(githubURL)
+        NSWorkspace.shared.open(githubURL)
     }
 
     @IBAction func toggleAutoupdater(_ sender: Any) {

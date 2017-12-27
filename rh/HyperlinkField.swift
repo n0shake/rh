@@ -28,7 +28,7 @@ class HyperlinkField: NSTextField {
     
     override func cursorUpdate(with event: NSEvent) {
         if event.trackingArea == cursorTrackingArea {
-            NSCursor.pointingHand().push()
+            NSCursor.pointingHand.push()
         } else {
             super.cursorUpdate(with: event)
         }

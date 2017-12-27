@@ -11,13 +11,13 @@ import Cocoa
 extension NSButton {
     func setTextColor(color : NSColor) {
         let colorTitle = NSMutableAttributedString(attributedString:self.attributedTitle)
-        colorTitle.addAttributes([NSForegroundColorAttributeName:color], range: NSMakeRange(0, self.attributedTitle.length))
+        colorTitle.addAttributes([NSAttributedStringKey.foregroundColor:color], range: NSMakeRange(0, self.attributedTitle.length))
         self.attributedTitle = colorTitle
     }
     
     func setTextColorForAlternateTitle(color : NSColor) {
         let colorTitle = NSMutableAttributedString(attributedString:self.attributedAlternateTitle)
-        colorTitle.addAttributes([NSForegroundColorAttributeName:color], range: NSMakeRange(0, self.attributedAlternateTitle.length))
+        colorTitle.addAttributes([NSAttributedStringKey.foregroundColor:color], range: NSMakeRange(0, self.attributedAlternateTitle.length))
         self.attributedAlternateTitle = colorTitle
     }
 }

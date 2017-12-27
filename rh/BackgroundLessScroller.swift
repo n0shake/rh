@@ -15,7 +15,7 @@ class BackgroundLessScroller: NSScroller {
         self.drawKnob()
     }
     
-    override class func scrollerWidth(for controlSize: NSControlSize, scrollerStyle: NSScrollerStyle) -> CGFloat {
+    override class func scrollerWidth(for controlSize: NSControl.ControlSize, scrollerStyle: NSScroller.Style) -> CGFloat {
         return 5
     }
     

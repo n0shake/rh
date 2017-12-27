@@ -44,7 +44,7 @@ class PortfolioViewController: NSViewController {
  
     @IBOutlet weak var mainTableview: NSTableView! {
         didSet {
-            self.mainTableview.register(forDraggedTypes: [PortfolioKeys.DragKey.rawValue])
+//            self.mainTableview.register(forDraggedTypes: [PortfolioKeys.DragKey.rawValue], forIdentifier: <#NSUserInterfaceItemIdentifier#>)
         }
     }
     @IBOutlet weak var supplementaryView: NSView! {
@@ -59,7 +59,7 @@ class PortfolioViewController: NSViewController {
     fileprivate var portfolios = [Security]()
     
     init() {
-        super.init(nibName: PortfolioKeys.WatchListNibName.rawValue, bundle: nil)!
+        super.init(nibName: NSNib.Name(rawValue: PortfolioKeys.WatchListNibName.rawValue), bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -275,7 +275,7 @@ class PortfolioViewController: NSViewController {
     }
    
     @IBAction func logoutAction(_ sender: Any) {
-        let delegate = NSApplication.shared().delegate as! AppDelegate
+        let delegate = NSApplication.shared.delegate as! AppDelegate
         delegate.logout()
     }
     
@@ -286,7 +286,7 @@ class PortfolioViewController: NSViewController {
     }
         
     func closePopover() {
-        let delegate = NSApplication.shared().delegate as! AppDelegate
+        let delegate = NSApplication.shared.delegate as! AppDelegate
         delegate.toggle()
     }
     
@@ -301,25 +301,25 @@ extension PortfolioViewController : NSTableViewDataSource, NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         
         if row == 0 {
-            let field = tableView.make(withIdentifier: PortfolioKeys.GroupCellIdentifier.rawValue, owner: tableView) as? NSTextField
+            let field = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: PortfolioKeys.GroupCellIdentifier.rawValue), owner: tableView) as? NSTextField
             field?.stringValue = PortfolioKeys.PortfolioListGroupCellTitle.rawValue
             return field
         }
         
         if row == self.securitiesOwned.count + 1 {
-            let field = tableView.make(withIdentifier: PortfolioKeys.GroupCellIdentifier.rawValue, owner: tableView) as? NSTextField
+            let field = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: PortfolioKeys.GroupCellIdentifier.rawValue), owner: tableView) as? NSTextField
             field?.stringValue = PortfolioKeys.WatchListGroupCellTitle.rawValue
             return field
         }
         
         if row < self.securitiesOwned.count + 1 {
-            let cell = tableView.make(withIdentifier: PortfolioKeys.PortfolioListGroupCellIdentifier.rawValue, owner: tableView) as? StockTableViewCell
+            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: PortfolioKeys.PortfolioListGroupCellIdentifier.rawValue), owner: tableView) as? StockTableViewCell
             cell?.configure(security: self.securitiesOwned[row-1])
             return cell
         }
         
         if portfolios.count > 0 && PortfolioViewController.portfolioCounter < portfolios.count {
-            let cell = tableView.make(withIdentifier: PortfolioKeys.WatchListGroupCellIdentifier.rawValue, owner: tableView) as? WatchlistTableCellView
+            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: PortfolioKeys.WatchListGroupCellIdentifier.rawValue), owner: tableView) as? WatchlistTableCellView
             cell?.configure(self.portfolios[PortfolioViewController.portfolioCounter])
             PortfolioViewController.portfolioCounter += 1
             return cell
@@ -348,12 +348,12 @@ extension PortfolioViewController : NSTableViewDataSource, NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, writeRowsWith rowIndexes: IndexSet, to pboard: NSPasteboard) -> Bool {
         let data = NSKeyedArchiver.archivedData(withRootObject: rowIndexes)
-        pboard.declareTypes([PortfolioKeys.DragKey.rawValue], owner: self)
-        pboard.setData(data, forType: PortfolioKeys.DragKey.rawValue)
+        pboard.declareTypes([NSPasteboard.PasteboardType(rawValue: PortfolioKeys.DragKey.rawValue)], owner: self)
+        pboard.setData(data, forType: NSPasteboard.PasteboardType(rawValue: PortfolioKeys.DragKey.rawValue))
         return true
     }
     
-    func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool {
+    internal func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
         
         if row == 0 || row >= self.securitiesOwned.count + 1{
             return false
@@ -370,7 +370,7 @@ extension PortfolioViewController : NSTableViewDataSource, NSTableViewDelegate {
         }
         
         let pasteboard : NSPasteboard = info.draggingPasteboard()
-        let data: Data = pasteboard.data(forType: PortfolioKeys.DragKey.rawValue)!
+        let data: Data = pasteboard.data(forType: NSPasteboard.PasteboardType(rawValue: PortfolioKeys.DragKey.rawValue))!
         let rowIndexes = NSKeyedUnarchiver.unarchiveObject(with: data) as! IndexSet
         print(rowIndexes.first!, destinationRow)
         let currentSecurity : SecurityOwned = self.securitiesOwned[rowIndexes.first!-1]
@@ -382,7 +382,7 @@ extension PortfolioViewController : NSTableViewDataSource, NSTableViewDelegate {
     }
     
     
-    func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation {
+    func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
         return .move
     }
     

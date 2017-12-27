@@ -26,7 +26,7 @@ class LoginViewController: NSViewController {
     }
     
     init() {
-        super.init(nibName: "LoginView", bundle: nil)!
+        super.init(nibName: NSNib.Name(rawValue: "LoginView"), bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -102,8 +102,8 @@ class LoginViewController: NSViewController {
     }
     
     func validateFields() -> Bool {
-        if self.emailField.stringValue.characters.count == 0 ||
-            self.passwordField.stringValue.characters.count == 0 {
+        if self.emailField.stringValue.count == 0 ||
+            self.passwordField.stringValue.count == 0 {
             return false
         }
         return true
@@ -140,7 +140,7 @@ class LoginViewController: NSViewController {
     
     private func slide() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "MenubarTitleNeedsUpdate"), object: nil)
-        let delegate = NSApplication.shared().delegate as! AppDelegate
+        let delegate = NSApplication.shared.delegate as! AppDelegate
         delegate.slideToPortfolio()
     }
 

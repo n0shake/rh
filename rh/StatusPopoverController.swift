@@ -39,15 +39,15 @@ class StatusPopoverController: NSObject {
     private func installApplicationTerminationListener() {
         let delayTime = DispatchTime.now() + Double(Int64(2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: delayTime) {
-            NotificationCenter.default.addObserver(self,
-                                                   selector:#selector(StatusPopoverController.closePopover),
-                                                   name: NSNotification.Name.NSApplicationDidResignActive,
-                                                   object: nil)
+//            NotificationCenter.default.addObserver(self,
+//                                                   selector:#selector(StatusPopoverController.closePopover),
+//                                                   name: NSNotification.Name.didResignActiveNotification,
+//                                                   object: nil)
         }
     }
     
     fileprivate func setPopoverAppearance() {
-        popover.appearance = NSAppearance(appearanceNamed: NSAppearanceNameVibrantDark, bundle: nil)
+        popover.appearance = NSAppearance(appearanceNamed: NSAppearance.Name.vibrantDark, bundle: nil)
         popover.behavior = .applicationDefined
         popover.animates = true
     }
@@ -82,24 +82,33 @@ class StatusPopoverController: NSObject {
 
     func transitionToPortfolioViewController() {
         DispatchQueue.main.async {
-            let transition: NSViewControllerTransitionOptions = .slideLeft
+            let transition: NSViewController.TransitionOptions = .slideLeft
+//            self.popover.contentViewController?.transition(from: self.loginController,
+//                                                            to: self.popoverController,
+//                                                            options: transition,
+//                                                            completionHandler: { finished in
+//            })
+            
             self.popover.contentViewController?.transition(from: self.loginController,
-                                                            to: self.popoverController,
-                                                            options: transition,
-                                                            completionHandler: { finished in
+                                                           to: self.popoverController,
+                                                           options: transition, completionHandler: {
             })
         }
+        
+        
+        
+        
     }
     
     func logout() {
         Authenticator.shared.logout()
         DispatchQueue.main.async {
-            let transition: NSViewControllerTransitionOptions = .slideRight
-            self.popover.contentViewController?.transition(from: self.popoverController,
-                                                            to: self.loginController,
-                                                            options: transition,
-                                                            completionHandler: { finished in
-            })
+            let transition: NSViewController.TransitionOptions = .slideRight
+//            self.popover.contentViewController?.transition(from: self.popoverController,
+//                                                            to: self.loginController,
+//                                                            options: transition,
+//                                                            completionHandler: { finished in
+//            })
         }
         
     }

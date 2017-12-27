@@ -60,9 +60,9 @@ class MenubarController: NSObject {
     }
     
     lazy var menubarItem: NSStatusItem = {
-        let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
-        let font = NSFont.monospacedDigitSystemFont(ofSize: 14, weight: 0)
-        statusItem.attributedTitle = NSAttributedString(string: "rh", attributes: [NSFontAttributeName : font])
+        let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        let font = NSFont.monospacedDigitSystemFont(ofSize: 14, weight: NSFont.Weight.light)
+        statusItem.attributedTitle = NSAttributedString(string: "rh", attributes: [NSAttributedStringKey.font : font])
         statusItem.target = self
         statusItem.action = #selector(statusItemAction(_:))
         statusItem.highlightMode = true
@@ -136,8 +136,8 @@ class MenubarController: NSObject {
                     floatingValue!,
                     todayClose! - previousClose!)
                 self.menubarItem.attributedTitle = NSAttributedString(string: overallString,
-                                                                 attributes: [NSFontAttributeName :
-                                                                    NSFont.monospacedDigitSystemFont(ofSize: 14, weight:0)])
+                                                                      attributes: [NSAttributedStringKey.font :
+                                                                        NSFont.monospacedDigitSystemFont(ofSize: 14, weight:NSFont.Weight.regular)])
             }
         }
     }

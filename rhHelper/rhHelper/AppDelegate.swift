@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let mainPath = NSString(string: Bundle.main.bundlePath)
         let strippedPath = NSString(string : NSString(string: mainPath.deletingLastPathComponent).deletingLastPathComponent)
         let moreSripping = NSString(string: strippedPath.deletingLastPathComponent).deletingLastPathComponent
-        NSWorkspace.shared().launchApplication(moreSripping)
+        NSWorkspace.shared.launchApplication(moreSripping)
         NSApp.terminate(nil)
     }
 
